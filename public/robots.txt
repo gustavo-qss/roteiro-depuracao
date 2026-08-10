@@ -1,0 +1,3 @@
+# Atividade de turma: nao ha motivo para isto aparecer em buscador.
+User-agent: *
+Disallow: /

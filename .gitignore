@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+*.local
+
+# Entregas dos alunos — dados de aluno nao vao para o repositorio.
+respostas/
+
+# Lista nominal completa da turma: fica so na sua maquina.
+# O que vai ao ar e o public/alunos.csv, com nome + iniciais.
+validador/alunos-completo.csv
