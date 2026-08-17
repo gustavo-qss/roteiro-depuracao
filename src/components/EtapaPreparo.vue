@@ -61,10 +61,59 @@ const nomeArquivo = computed(() => `${props.algoritmo.classe}.java`)
           <code>// BP3</code> no próprio código.
         </li>
         <li>
-          <strong>Ainda não rode nada.</strong> A próxima tela vai dizer a hora exata de
-          apertar <kbd>Shift</kbd> + <kbd>F9</kbd> (Debug).
+          <strong>Ainda não rode nada.</strong> A próxima tela diz a hora exata de
+          iniciar em modo Debug.
         </li>
       </ol>
+    </div>
+
+    <!-- 1b. Onde ler os valores -->
+    <div class="cartao secao">
+      <h3 class="secao__titulo">A janela de Debug</h3>
+      <p class="secao__texto">
+        É de lá que você vai tirar todos os valores do roteiro. Vale abrir uma vez agora
+        para saber o que procurar.
+      </p>
+      <dl class="glossario">
+        <div>
+          <dt>Botão Debug 🐞</dt>
+          <dd>
+            No topo direito, ao lado do ▶ verde. É ele que roda parando nos breakpoints —
+            o ▶ verde (Run) executa tudo direto e ignora as bolinhas vermelhas.
+          </dd>
+        </div>
+        <div>
+          <dt>Variables</dt>
+          <dd>
+            O painel principal do rodapé. Lista o valor de cada variável visível
+            <strong>naquele exato momento</strong>. É daqui que saem quase todas as
+            respostas. Variáveis ainda não declaradas simplesmente não aparecem — e é
+            aqui também que surge o item <em>Returned value</em>, logo depois de um
+            Step Out. A próxima tela mostra como ligar isso.
+          </dd>
+        </div>
+        <div>
+          <dt>Frames</dt>
+          <dd>
+            Ao lado de Variables: a pilha de chamadas, quem chamou quem. Serve para você
+            saber em qual método está.
+          </dd>
+        </div>
+        <div>
+          <dt>Barra do depurador</dt>
+          <dd>
+            Os botões de Step Into, Step Over, Step Out e Resume Program. Passe o mouse
+            por cima para ver o nome de cada um — é por esse nome que o roteiro se refere
+            a eles. No fim dessa barra fica o ícone <strong>⋮</strong> (ou uma
+            engrenagem), que abre as configurações do depurador.
+          </dd>
+        </div>
+      </dl>
+      <p class="nota">
+        Os valores também aparecem em cinza no próprio editor, ao lado de cada linha já
+        executada. É a mesma informação do painel Variables, num lugar mais confortável
+        de olhar.
+      </p>
     </div>
 
     <!-- 2. Codigo -->
@@ -269,6 +318,30 @@ code {
   border-radius: 50%;
   background: #c8342a;
   margin-right: 0.45rem;
+}
+
+/* glossario da janela de debug */
+.glossario {
+  margin: 0 0 1.25rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.glossario dt {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--tinta);
+  margin-bottom: 0.15rem;
+}
+
+.glossario dd {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--tinta-2);
+}
+
+.glossario dd strong {
+  color: var(--tinta);
 }
 
 /* conferencia */

@@ -201,20 +201,6 @@ a:focus-visible {
   font-family: var(--mono);
 }
 
-/* --- tecla de atalho ---------------------------------------------- */
-
-kbd {
-  display: inline-block;
-  font-size: 0.8125rem;
-  padding: 0.05rem 0.4rem;
-  border: 1px solid var(--filete-forte);
-  border-bottom-width: 2px;
-  border-radius: 3px;
-  background: var(--superficie-2);
-  color: var(--tinta);
-  white-space: nowrap;
-}
-
 /* --- utilitarios --------------------------------------------------- */
 
 .sr-only {

@@ -2,7 +2,7 @@
  * algoritmos.js — codigo Java de cada exercicio + o roteiro de passos.
  *
  * IMPORTANTE: aqui NAO existe gabarito. Este arquivo so guarda as PERGUNTAS
- * (em que linha o depurador esta, que tecla apertar, quais variaveis anotar).
+ * (em que linha o depurador esta, que comando executar, quais variaveis anotar).
  * Os valores esperados sao calculados apenas em `validador/gabarito.mjs`, que
  * fica fora do bundle do site — assim o aluno nao acha a resposta no DevTools.
  *
@@ -12,24 +12,23 @@
  */
 
 /* --- acoes do depurador ------------------------------------------- */
+/* Sem atalhos de teclado de proposito: o keymap muda de versao para versao do
+   IntelliJ e em notebook ainda depende da tecla Fn. O aluno acha o comando
+   pelo NOME, no botao da barra do depurador ou no menu Run. */
 const INTO = {
   nome: 'Step Into',
-  tecla: 'F7',
   resumo: 'entra no metodo chamado nesta linha',
 }
 const OVER = {
   nome: 'Step Over',
-  tecla: 'F8',
   resumo: 'executa a linha inteira sem entrar em metodos',
 }
 const OUT = {
   nome: 'Step Out',
-  tecla: 'Shift + F8',
   resumo: 'termina o metodo atual e volta para quem chamou',
 }
 const RESUME = {
-  nome: 'Resume',
-  tecla: 'F9',
+  nome: 'Resume Program',
   resumo: 'segue ate o proximo breakpoint',
 }
 
@@ -100,8 +99,17 @@ const calibrador = {
       local: 'BP1 · main()',
       linha: 'int resultado = calibrar(base, fator);',
       contexto:
-        'O depurador parou ANTES de executar esta linha. Nada dela rodou ainda.',
-      campos: [num('base'), num('fator')],
+        'O depurador parou ANTES de executar esta linha. Nada dela rodou ainda: ' +
+        '`resultado` ainda nao tem valor nenhum.',
+      dica:
+        'Este primeiro passo e so para voce achar o painel Variables e conferir que ' +
+        'colou o codigo certo. Os dois numeros sao os mesmos que estao escritos no ' +
+        'main() — e para ser assim mesmo. Do passo 2 em diante os valores passam a ' +
+        'aparecer so no painel, e nao mais no codigo.',
+      campos: [
+        num('base', 'base', 'o que aparece em Variables'),
+        num('fator', 'fator', 'o que aparece em Variables'),
+      ],
       acao: INTO,
     },
     {
@@ -136,9 +144,16 @@ const calibrador = {
       local: 'combinar() · de volta',
       linha: 'int extra = compensar(parcial);',
       contexto:
-        'Voce voltou para a MESMA linha de onde saiu. O IntelliJ mostra o valor devolvido em Variables, como um item chamado "Returned value" ou ao lado da linha.',
+        'Voce voltou para a MESMA linha de onde saiu. Com o Show Method Return Values '
+        + 'ligado, o valor devolvido aparece em Variables como um item '
+        + '"Returned value". Se voce nao ligou, esse item nao existe — e ai o jeito '
+        + 'e calcular pela linha do return.',
       campos: [
-        num('retorno_compensar', 'valor devolvido por compensar()'),
+        num(
+          'retorno_compensar',
+          'valor devolvido por compensar()',
+          'se nao aparecer em Variables, calcule pela linha `return z + 7;`',
+        ),
         esc('extra_definido', 'A variavel `extra` ja tem valor neste momento?', SIM_NAO),
       ],
       acao: OVER,
@@ -154,7 +169,13 @@ const calibrador = {
       local: 'calibrar() · de volta',
       linha: 'int bruto = combinar(x, y);',
       contexto: 'Voce desceu um nivel na pilha de chamadas.',
-      campos: [num('retorno_combinar', 'valor devolvido por combinar()')],
+      campos: [
+        num(
+          'retorno_combinar',
+          'valor devolvido por combinar()',
+          'se nao aparecer em Variables, e o valor de `extra` do passo anterior',
+        ),
+      ],
       acao: OVER,
     },
     {
@@ -175,7 +196,7 @@ const calibrador = {
       local: 'normalizar()',
       linha: 'int ajustado = arredondar(reduzido);',
       contexto:
-        'ATENCAO: agora e Step Over (F8), e nao Step Into. Observe a diferenca.',
+        'ATENCAO: agora e Step Over, e nao Step Into. Observe a diferenca.',
       campos: [num('reduzido')],
       acao: OVER,
     },
@@ -198,7 +219,13 @@ const calibrador = {
       local: 'calibrar() · de volta',
       linha: 'int limpo = normalizar(bruto, y);',
       contexto: 'De novo na linha da chamada, com o retorno pendurado.',
-      campos: [num('retorno_normalizar', 'valor devolvido por normalizar()')],
+      campos: [
+        num(
+          'retorno_normalizar',
+          'valor devolvido por normalizar()',
+          'se nao aparecer em Variables, e o valor de `ajustado` do passo anterior',
+        ),
+      ],
       acao: OVER,
     },
     {
@@ -213,7 +240,11 @@ const calibrador = {
       linha: 'int resultado = calibrar(base, fator);',
       contexto: 'Voltamos ao ponto de partida, na mesma linha do BP1.',
       campos: [
-        num('retorno_calibrar', 'valor devolvido por calibrar()'),
+        num(
+          'retorno_calibrar',
+          'valor devolvido por calibrar()',
+          'se nao aparecer em Variables, e o valor de `limpo` do passo anterior',
+        ),
         esc('resultado_definido', 'A variavel `resultado` ja tem valor?', SIM_NAO),
       ],
       acao: OVER,
@@ -250,7 +281,7 @@ const inspetor = {
   classe: 'Inspetor',
   titulo: 'Busca do maior valor',
   sinopse:
-    'Um laco que percorre um vetor procurando o maior numero. O foco e usar Resume (F9) para pular de uma volta do laco para a proxima.',
+    'Um laco que percorre um vetor procurando o maior numero. O foco e usar o Resume Program para pular de uma volta do laco para a proxima.',
   breakpoints: [
     { rotulo: 'BP1', linha: 'int resultado = analisar(leituras);', onde: 'main()' },
     { rotulo: 'BP2', linha: 'if (ehMaior(v[i], maior)) {', onde: 'encontrarMaior()' },
@@ -302,7 +333,13 @@ const inspetor = {
       local: 'BP1 · main()',
       linha: 'int resultado = analisar(leituras);',
       contexto:
-        'Expanda `leituras` no painel Variables para ver os cinco numeros.',
+        'O depurador parou ANTES de executar esta linha. Clique na setinha ao lado de '
+        + '`leituras`, no painel Variables, para abrir o vetor.',
+      dica:
+        'Este primeiro passo e so para voce achar o painel Variables e conferir que '
+        + 'colou o codigo certo. Os numeros sao os mesmos que estao escritos no main() '
+        + '— e para ser assim mesmo. Do passo 2 em diante os valores passam a aparecer '
+        + 'so no painel, e nao mais no codigo.',
       campos: [arr('leituras', 'leituras', 'os 5 numeros, separados por virgula')],
       acao: INTO,
     },
@@ -369,7 +406,7 @@ const inspetor = {
     {
       local: 'BP2 · 3a parada',
       linha: 'if (ehMaior(v[i], maior)) {',
-      contexto: 'Continue anotando antes de apertar F9.',
+      contexto: 'Continue anotando antes de seguir.',
       campos: [
         num('i'),
         num('v_i', 'v[i]'),
@@ -423,14 +460,27 @@ const inspetor = {
       local: 'ajustar() · de volta',
       linha: 'return dobrar(soma);',
       contexto: 'De volta ao return de ajustar().',
-      campos: [num('retorno_dobrar', 'valor devolvido por dobrar()')],
+      campos: [
+        num(
+          'retorno_dobrar',
+          'valor devolvido por dobrar()',
+          'se nao aparecer em Variables, calcule pela linha `return z * 2;`',
+        ),
+      ],
       acao: OUT,
     },
     {
       local: 'analisar() · de volta',
       linha: 'int ajustado = ajustar(maior, dados.length);',
       contexto: 'Repare que `ajustado` ainda nao recebeu nada.',
-      campos: [num('maior'), num('retorno_ajustar', 'valor devolvido por ajustar()')],
+      campos: [
+        num('maior'),
+        num(
+          'retorno_ajustar',
+          'valor devolvido por ajustar()',
+          'se nao aparecer em Variables, e o mesmo valor que dobrar() acabou de devolver',
+        ),
+      ],
       acao: OVER,
     },
     {
@@ -444,7 +494,13 @@ const inspetor = {
       local: 'BP1 · main() · de volta',
       linha: 'int resultado = analisar(leituras);',
       contexto: 'Voltamos para main().',
-      campos: [num('retorno_analisar', 'valor devolvido por analisar()')],
+      campos: [
+        num(
+          'retorno_analisar',
+          'valor devolvido por analisar()',
+          'se nao aparecer em Variables, e o valor de `ajustado` do passo anterior',
+        ),
+      ],
       acao: OVER,
     },
     {
@@ -462,7 +518,7 @@ const inspetor = {
         num('saida_console', 'numero impresso no console'),
         txt(
           'conclusao',
-          'Com suas palavras: para que serviu o Resume (F9) neste exercicio?',
+          'Com suas palavras: para que serviu o Resume Program neste exercicio?',
         ),
       ],
       acao: null,
@@ -536,7 +592,14 @@ const ordenador = {
     {
       local: 'BP1 · main()',
       linha: 'int resultado = processar(valores);',
-      contexto: 'Expanda `valores` no painel Variables.',
+      contexto:
+        'O depurador parou ANTES de executar esta linha. Clique na setinha ao lado de '
+        + '`valores`, no painel Variables, para abrir o vetor.',
+      dica:
+        'Este primeiro passo e so para voce achar o painel Variables e conferir que '
+        + 'colou o codigo certo. Os numeros sao os mesmos que estao escritos no main() '
+        + '— e para ser assim mesmo. Do passo 2 em diante os valores passam a aparecer '
+        + 'so no painel, e nao mais no codigo.',
       campos: [arr('valores', 'valores', 'os 4 numeros, separados por virgula')],
       acao: INTO,
     },
@@ -582,7 +645,7 @@ const ordenador = {
     {
       local: 'umaPassada() · de volta',
       linha: 'if (foraDeOrdem(v[i], v[i + 1])) {',
-      contexto: 'Antes de apertar F8, preveja para onde o depurador vai pular.',
+      contexto: 'Antes de executar o Step Over, preveja para onde o depurador vai pular.',
       campos: [
         esc('proxima_linha', 'Qual linha o depurador vai destacar agora?', [
           'trocar(v, i);',
@@ -695,21 +758,40 @@ const ordenador = {
       local: 'pontuar() · de volta',
       linha: 'return combinar(ultimo, trocas);',
       contexto: 'Voltamos ao return de pontuar().',
-      campos: [num('retorno_combinar', 'valor devolvido por combinar()')],
+      campos: [
+        num(
+          'retorno_combinar',
+          'valor devolvido por combinar()',
+          'se nao aparecer em Variables, calcule pela linha `return a * 10 + b;`',
+        ),
+      ],
       acao: OUT,
     },
     {
       local: 'processar() · de volta',
       linha: 'return pontuar(v, trocas);',
       contexto: 'Penultimo nivel da pilha.',
-      campos: [num('trocas'), num('retorno_pontuar', 'valor devolvido por pontuar()')],
+      campos: [
+        num('trocas'),
+        num(
+          'retorno_pontuar',
+          'valor devolvido por pontuar()',
+          'se nao aparecer em Variables, e o mesmo valor que combinar() acabou de devolver',
+        ),
+      ],
       acao: OUT,
     },
     {
       local: 'BP1 · main() · de volta',
       linha: 'int resultado = processar(valores);',
       contexto: 'De volta ao ponto de partida.',
-      campos: [num('retorno_processar', 'valor devolvido por processar()')],
+      campos: [
+        num(
+          'retorno_processar',
+          'valor devolvido por processar()',
+          'se nao aparecer em Variables, e o mesmo valor que pontuar() acabou de devolver',
+        ),
+      ],
       acao: OVER,
     },
     {

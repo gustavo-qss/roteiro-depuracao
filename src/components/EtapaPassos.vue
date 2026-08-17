@@ -93,9 +93,24 @@ function irPara(i) {
 
     <!-- Instrucao de largada, so no primeiro passo -->
     <div v-if="indice === 0" class="nota nota--atencao partida">
-      <strong>Comece agora:</strong> aperte <kbd>Shift</kbd> + <kbd>F9</kbd> (Debug) no
-      IntelliJ. O programa roda e para sozinho na linha do <strong>BP1</strong>, que é
-      exatamente onde este passo começa.
+      <p>
+        <strong>1. Comece agora:</strong> rode o programa em modo
+        <strong>Debug</strong> — o botão com o ícone de inseto 🐞, no topo direito, ao
+        lado do ▶ verde. <strong>Não use o ▶ verde</strong> (esse é o Run: o programa
+        executa direto, sem parar nos breakpoints). O programa vai parar sozinho na
+        linha do <strong>BP1</strong>, que é exatamente onde este passo começa.
+      </p>
+      <p>
+        <strong>2. Assim que ele parar</strong>, ligue uma configuração que vários passos
+        deste roteiro precisam: na barra do depurador, no rodapé, clique no ícone
+        <strong>⋮</strong> (ou na engrenagem) → <em>Debugger Settings</em> → marque
+        <strong>Show Method Return Values</strong>.
+      </p>
+      <p class="partida__nota">
+        Sem essa opção o painel não mostra o que cada método acabou de devolver, e o
+        Step Out fica difícil de acompanhar. É só uma vez — o IntelliJ lembra daqui para
+        frente.
+      </p>
     </div>
 
     <!-- Onde o depurador esta -->
@@ -108,6 +123,8 @@ function irPara(i) {
     <!-- Campos -->
     <div class="cartao painel">
       <h3 class="painel__titulo">Anote o que você está vendo</h3>
+
+      <p v-if="passo.dica" class="nota dica">{{ passo.dica }}</p>
 
       <div class="campos">
         <div
@@ -193,9 +210,12 @@ function irPara(i) {
       <p class="acao__intro">Depois de anotar, execute no IntelliJ:</p>
       <p class="acao__comando">
         <span class="acao__nome">{{ passo.acao.nome }}</span>
-        <kbd>{{ passo.acao.tecla }}</kbd>
       </p>
       <p class="acao__resumo">{{ passo.acao.resumo }}</p>
+      <p class="acao__onde">
+        Botão na barra do depurador, no rodapé — passe o mouse por cima para ver o nome.
+        Também está no menu <em>Run</em>.
+      </p>
     </div>
     <div v-else class="cartao acao acao--fim">
       <p class="acao__intro">Fim do roteiro</p>
@@ -298,6 +318,27 @@ function irPara(i) {
   margin-bottom: 1.25rem;
 }
 
+.partida p {
+  margin-bottom: 0.6rem;
+}
+
+.partida p:last-child {
+  margin-bottom: 0;
+}
+
+.partida__nota {
+  padding-top: 0.55rem;
+  border-top: 1px solid #e2d3bf;
+  font-size: 0.8125rem;
+  color: var(--tinta-3);
+}
+
+.partida em {
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+}
+
 .painel {
   margin-bottom: 1.25rem;
 }
@@ -333,6 +374,10 @@ function irPara(i) {
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--filete);
+}
+
+.dica {
+  margin-bottom: 1.25rem;
 }
 
 /* campos */
@@ -439,7 +484,7 @@ function irPara(i) {
 
 .acao__nome {
   font-family: var(--serifada);
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   color: var(--tinta);
 }
 
@@ -447,6 +492,19 @@ function irPara(i) {
   margin: 0;
   font-size: 0.875rem;
   color: var(--tinta-2);
+}
+
+.acao__onde {
+  margin: 0.6rem 0 0;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--filete);
+  font-size: 0.75rem;
+  color: var(--tinta-3);
+}
+
+.acao__onde em {
+  font-style: normal;
+  font-family: var(--mono);
 }
 
 .aviso {
